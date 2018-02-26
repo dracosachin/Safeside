@@ -39,10 +39,9 @@
         </div>
         </li>
       <li><a class="waves-effect" href="#!"><i class="material-icons">account_balance</i>Account Balance</a></li>
-      <li><a class ="waves-effect" href="#!"><i class="material-icons">mood</i>Second Link</a></li>
-      <li><div class="divider"></div></li>
+      <li><a class ="waves-effect" href="#!"><i class="material-icons">attach_money</i>Withdraw/Deposit</a></li>
       <li><a class="subheader">Subheader</a></li>
-      <li><a class="waves-effect" href="#!">Anything Else</a></li>
+      <li><a class="waves-effect"><i class="material-icons">settings</i>Settings</a></li>
    
     </ul>
     
@@ -64,15 +63,36 @@
           <div class="footer-copyright">
             <div class="container">
             © 2014 Copyright Text
-            <a class="grey-text text-lighten-4 right" href="#!logout">LOGOUT</a>
+            <a class="grey-text text-lighten-4 right" onclick="logout()">LOGOUT</a>
             </div>
           </div>
         </footer>
 
 
 </body>
+<script src="https://www.gstatic.com/firebasejs/4.9.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.9.1/firebase-auth.js"></script>
 <script type="text/javascript">
-	  $(".button-collapse").sideNav();
+var config = {
+    apiKey: "AIzaSyB9SU9h9myh6hg1cQet_5MFB7Dy9-8EPTU",
+    authDomain: "safe-side-project.firebaseapp.com",
+    databaseURL: "https://safe-side-project.firebaseio.com",
+    projectId: "safe-side-project",
+    storageBucket: "safe-side-project.appspot.com",
+    messagingSenderId: "178491336655"
+  };
+  firebase.initializeApp(config);
+    $(".button-collapse").sideNav();
+    function logout() {
+      firebase.auth().signOut().then(function() {
+        console.log("logged out");
+        document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        console.log(document.cookie);
+        window.location.assign('/');
+      }).catch(function(error) {
+        // An error happened.
+      });
+    }
 
 </script>
 </html>

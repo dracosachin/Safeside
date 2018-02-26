@@ -46,13 +46,58 @@ function login() {
 	var pass =  document.getElementById('loginpass').value
 	firebase.auth().signInWithEmailAndPassword(user, pass)
 		.then(function() {
+
+			/* Does an authenticated request to a Firebase Functions endpoint using an Authorization header.
+			firebase.auth().currentUser.getToken().then(function(token) {
+				console.log('Sending request to', '/hi', 'with ID token in Authorization header.');
+				var req = new XMLHttpRequest();
+				req.onload = function() {
+					//this.responseContainer.innerText = req.responseText;
+					setTimeout(function() {
+						console.log(req.responseText);
+					},1000)
+					
+				}.bind(this);
+				req.onerror = function() {
+					//this.responseContainer.innerText = 'There was an error';
+					console.log("There was an error");
+				
+				}.bind(this);
+				req.open('GET', '/hi', true);
+				req.setRequestHeader('Authorization', 'Bearer ' + token);
+				req.send();
+
+				
+			}.bind(this));*/
+			//// Does an authenticated request to a Firebase Functions endpoint using a __session cookie
+			firebase.auth().currentUser.getToken(true).then(function(token) {
+				// set the __session cookie
+				document.cookie = '__session=' + token + ';max-age=3600';
+		
+				console.log('Sending request to', '/hi', 'with ID token in __session cookie.');
+				var req = new XMLHttpRequest();
+				req.onload = function() {
+					//this.responseContainerCookie.innerText = req.responseText;
+					setTimeout(function() {
+						console.log(req.responseText);
+					},1000)
+				}.bind(this);
+				req.onerror = function() {
+					this.responseContainerCookie.innerText = 'There was an error';
+				}.bind(this);
+				req.open('GET', '/hi', true);
+				req.send();
+				window.location.assign('/dashboard');
+			}.bind(this));
+
+			/*
 				var user = firebase.auth().currentUser;
 				console.log(user.uid);
 				document.getElementById("uid").value = user.uid;
 				console.log("uid value" + document.getElementById("uid").value)
 				$(document).ready(function() {
 					$('#logform').submit();
-				})
+				}) */
 				
 		})
 		.catch(function(error) {
@@ -89,7 +134,10 @@ firebase.auth().onAuthStateChanged(function(user) {
 		console.log("user signed in and user is " + user);
 		console.log(user);
   } else {
-    console.log("user logged out");
+	var user = firebase.auth().currentUser
+	console.log("user logged out");
+	console.log(user);
+	
 
   }
 });
